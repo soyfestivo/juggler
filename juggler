@@ -1,0 +1,9 @@
+#ifndef _JUGGLER_
+#define _JUGGLER_
+
+// main includes file for the lib
+
+#include "lib/thread_manager.h"
+#include "lib/thread_sync.h"
+
+#endif
