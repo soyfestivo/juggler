@@ -1,12 +1,3 @@
-# FLAGS = 
-
-# libSocialite.so:
-# 	g++ -fpic -c lib/Test.cpp -o test_file.o
-# 	g++ -shared -o libSocialite.so test_file.o
-
-# example: libSocialite.so
-# 	g++ -Ilib/ -L. -lSocialite examples/test.cpp -o examples/test
-
 FLAGS = -std=c++11 -O2
 LIBS = -lpthread
 
