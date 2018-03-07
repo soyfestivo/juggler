@@ -1,4 +1,4 @@
-#include "ThreadSync.h"
+#include "thread_sync.h"
 
 namespace Juggler {
 	ThreadSync::ThreadSync(int max) {

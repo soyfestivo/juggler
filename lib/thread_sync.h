@@ -4,7 +4,7 @@
 #include <iostream>
 #include <functional>
 
-#include "ThreadManager.h"
+#include "thread_manager.h"
 
 namespace Juggler {
 	class ThreadSync {

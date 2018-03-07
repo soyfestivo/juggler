@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <map>
 
-#include "ThreadManager.h"
+#include "thread_manager.h"
 
 std::map<pthread_t, std::string> threadManagerMap;
 Lock threadManagerMapLock;
