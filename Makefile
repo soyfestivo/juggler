@@ -10,6 +10,17 @@ thread_sync.o:
 all: thread_manager.o thread_sync.o
 	g++ -shared $(FLAGS) -o libJuggler.so thread_manager.o thread_sync.o
 
+install: all
+	cp juggler /usr/local/include
+	-mkdir /usr/local/include/juggler_lib
+	cp -r lib/*.h /usr/local/include/juggler_lib
+	cp libJuggler.so /usr/local/lib
+
+uninstall: clean
+	-rm -r /usr/local/include/juggler_lib
+	-rm /usr/local/include/juggler
+	-rm /usr/local/lib/libJuggler.so
+
 examples: all examples/example_1.cpp
 	g++ -I. -L. $(FLAGS) $(LIBS) -lJuggler examples/example_1.cpp -o example_1
 
