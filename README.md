@@ -6,11 +6,13 @@ Running batch jobs in multiple threads in C++ made easy with `ThreadSync` and ru
 ## Installation
 Installation is easy! All you need to do is compile:
 ```bash
-$ make all
+$ make install
 ```
-And then add when compiling make sure to include the location of the lib with both `-I` and `-L` like so:
+Note that install is putting the juggler `.so` in `/usr/local/lib` and the headers in `/usr/local/includes`. Be sure that these are included in your compiler's path for correct linkage.
+
+And then add when compiling make sure to include the location of the lib with both `-l` like so:
 ```bash
-$ g++ -I/path/to/juggler -L/path/to/juggler -lJuggler -lpthread my_files.cpp ... -o ...
+$ g++ -lJuggler -lpthread my_files.cpp ... -o ...
 ```
 ## Example
 A very simple example of batch job managment:
