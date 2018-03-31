@@ -5,5 +5,6 @@
 
 #include "juggler_lib/thread_manager.h"
 #include "juggler_lib/thread_sync.h"
+#include "juggler_lib/scheduler.h"
 
 #endif
