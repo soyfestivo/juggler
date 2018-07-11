@@ -9,14 +9,23 @@ std::map<pthread_t, std::string> threadManagerMap;
 Lock threadManagerMapLock;
 bool threadManagerMapLockSetup = false;
 
+std::vector<void (*) (pthread_t)> Juggler::ThreadManager::threadStartHooks;
+std::vector<void (*) (pthread_t)> Juggler::ThreadManager::threadReleaseHooks;
+
 namespace Juggler {
 	void* launch(void* index) {
 		// cannot be cancled? so we can use condition variables
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 		struct thread* thread = (struct thread*) index;
+		
+		// run thread start hooks if any
+		ThreadManager::runThreadStartHooks(thread->tid);		
 
 		// start the actual call
 		thread->func(thread->var);
+
+ 		// run thread release hooks if any
+		ThreadManager::runThreadReleaseHooks(thread->tid);
 
 		// clear it from the global tree
 		thread->manager->releaseFromGlobalTree(thread);
@@ -27,6 +36,34 @@ namespace Juggler {
 		releaseLock(thread->manager->lock);
 
 		pthread_exit(NULL);
+	}
+
+	void ThreadManager::addThreadStartHook(void (*caller) (pthread_t)) { 
+		ThreadManager::threadStartHooks.push_back(caller);
+	}
+	
+	void ThreadManager::addThreadReleaseHook(void (*caller) (pthread_t)) {
+		ThreadManager::threadReleaseHooks.push_back(caller);
+	}
+
+	void ThreadManager::runThreadStartHooks(pthread_t tid) {
+		acquireLock(threadManagerMapLock);
+		if(ThreadManager::threadStartHooks.size() > 0) {
+			for(auto hook = ThreadManager::threadStartHooks.begin(); hook != ThreadManager::threadStartHooks.end(); ++hook) {
+				(*hook)(tid);
+			}
+		}
+		releaseLock(threadManagerMapLock);
+	}
+
+	void ThreadManager::runThreadReleaseHooks(pthread_t tid) {
+		acquireLock(threadManagerMapLock);
+		if(ThreadManager::threadReleaseHooks.size() > 0) {
+			for(auto hook = ThreadManager::threadReleaseHooks.begin(); hook != ThreadManager::threadReleaseHooks.end(); ++hook) {
+				(*hook)(tid);
+			}
+		}
+		releaseLock(threadManagerMapLock);
 	}
 
 	void ThreadManager::printThreads(std::iostream& stream) {

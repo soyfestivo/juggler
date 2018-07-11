@@ -12,7 +12,7 @@ namespace Juggler {
 
 	void ThreadSync::waitForEveryone() {
 		acquireLock(lock);
-		if(count >= countUntil) {
+		if(count >= countUntil || countUntil == 1) {
 			releaseLock(lock);
 			return;
 		}
