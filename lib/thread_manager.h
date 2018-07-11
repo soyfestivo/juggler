@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #define Lock pthread_mutex_t
 #define Condition pthread_cond_t
@@ -29,6 +30,12 @@
 namespace Juggler {
 	class ThreadManager {
 	private:
+		static std::vector<void (*) (pthread_t)> threadStartHooks;
+		static std::vector<void (*) (pthread_t)> threadReleaseHooks;
+
+		static void runThreadStartHooks(pthread_t tid);
+		static void runThreadReleaseHooks(pthread_t tid);
+
 		friend void* launch(void* index);
 
 		int tMax;
@@ -44,6 +51,8 @@ namespace Juggler {
 		ThreadManager(int max);
 
 		static void printThreads(std::iostream& stream);
+		static void addThreadStartHook(void (*caller) (pthread_t));
+		static void addThreadReleaseHook(void (*caller) (pthread_t));
 
 		int reap();
 		int lease(void (*func) (void*), void* var, std::string description = "default");

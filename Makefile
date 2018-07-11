@@ -24,12 +24,14 @@ uninstall: clean
 	-rm /usr/local/include/juggler
 	-rm /usr/local/lib/libJuggler.so
 
-examples: all examples/example_1.cpp
+examples: all
 	g++ -I. -L. $(FLAGS) $(LIBS) -lJuggler examples/example_1.cpp -o example_1
 	g++ -I. -L. $(FLAGS) $(LIBS) -lJuggler examples/scheduler_example.cpp -o scheduler_example
+	g++ -I. -L. $(FLAGS) $(LIBS) -lJuggler examples/before_and_after_hooks.cpp -o before_and_after_hooks
 
 clean:
 	-rm *.o
 	-rm *.so
 	-rm example_1
 	-rm scheduler_example
+	-rm before_and_after_hooks
